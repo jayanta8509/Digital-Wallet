@@ -1,12 +1,12 @@
-from django.conf.urls import url
+from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
 urlpatterns = [
-    url(r'^wallet/$', views.WalletList),
-    url(r'^wallet/(?P<pk>[0-9]+)/$', views.WalletDetail),
-    url(r'^wallet/current/$',views.getAmountinWalletforStore),
-    url(r'^wallet/transaction/$',views.debitView),
+    path('wallet/', views.WalletList, name='wallet-list'),
+    path('wallet/<int:pk>/', views.WalletDetail, name='wallet-detail'),
+    path('wallet/current/', views.getAmountinWalletforStore, name='wallet-current'),
+    path('wallet/transaction/', views.debitView, name='wallet-transaction'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

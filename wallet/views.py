@@ -73,7 +73,7 @@ def getAmountinWalletforStore(request,format = None):
     if request.method == 'GET':
         return Response('Current amount available page. Data fields for POST are: store_id')
     elif request.method == 'POST':
-        print "Inside"
+        # print "Inside"
         received_json_data = json.loads(request.body)
         try:
             store_id = received_json_data["store_id"]
@@ -81,13 +81,13 @@ def getAmountinWalletforStore(request,format = None):
         except :
             return Response("ERROR! Invalid data field sent in POST. Please try again")
         #Variable to calculate the sum of the current available amount
-        print wallet_list
+        # print wallet_list
         current_amount = 0
         curr_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         for obj in wallet_list:
             t=(obj.expiry_time_of_credited_amount).strftime("%Y-%m-%d %H:%M:%S")
             if(obj.debit_or_credit == False and str(t) > str(curr_date)):
-                print "Loop"
+                # print "Loop"
                 current_amount += obj.curr_available_amount_if_credit_row
         json_data = {}
         json_data['current_time'] = curr_date
@@ -138,18 +138,18 @@ def createDebitCreditrecord(amount,method,remarks,store_id,expiry_date=None):
         debit_or_credit = True
         available_amount = 0
         amount_to_debit = float(amount)
-        print store_id
+        # print store_id
         wallet_list = Wallet.objects.filter(wallet2store_details= store_id,debit_or_credit = False).order_by('expiry_time_of_credited_amount')
-        print wallet_list
+        # print wallet_list
 
         for obj in wallet_list:
             if(obj.is_deleted == "0" and obj.curr_available_amount_if_credit_row > 0.0):
                 available_amount += obj.curr_available_amount_if_credit_row
 
-        print available_amount,amount_to_debit
+        # print available_amount,amount_to_debit
         if (float(available_amount) > float(amount_to_debit)):
             for obj in wallet_list:
-                    print "INSIDE"
+                    # print "INSIDE"
                     if(amount_to_debit == 0.0):
                         return
                     if(obj.curr_available_amount_if_credit_row >= amount_to_debit):
